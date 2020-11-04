@@ -1,3 +1,4 @@
-const { getPhrase } = require('./getPhrase');
+const { getPhrase } = require("./getPhrase");
+const { getTranslation } = require("./getTranslation");
 
-module.exports = { getPhrase };
+module.exports = { getPhrase, getTranslation };
