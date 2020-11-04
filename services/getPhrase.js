@@ -1,19 +1,30 @@
 const puppeteer = require("puppeteer");
 require("dotenv").config();
 
+const {
+  WEBSITE1_URL,
+  PROVERB_CHIN,
+  PROVERB_PINYIN,
+  PROVERB_ENG,
+  SENT_CHIN,
+  SENT_PINYIN,
+  SENT_ENG,
+  SENT_NAME
+} = process.env;
+
 const _myStore = {
   page: null,
-  url: process.env.WEBSITE1_URL,
+  url: WEBSITE1_URL,
   proverb: {
-    xPathChin: process.env.PROVERB_CHIN,
-    xPathPinyin: process.env.PROVERB_PINYIN,
-    xPathEng: process.env.PROVERB_ENG
+    xPathChin: PROVERB_CHIN,
+    xPathPinyin: PROVERB_PINYIN,
+    xPathEng: PROVERB_ENG
   },
   sentence: {
-    xPathChin: process.env.SENT_CHIN,
-    xPathPinyin: process.env.SENT_PINYIN,
-    xPathEng: process.env.SENT_ENG,
-    xPathName: process.env.SENT_NAME
+    xPathChin: SENT_CHIN,
+    xPathPinyin: SENT_PINYIN,
+    xPathEng: SENT_ENG,
+    xPathName: SENT_NAME
   }
 };
 
