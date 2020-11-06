@@ -28,17 +28,22 @@ app.get("/get_it/:phraseType", async (req, res) => {
       `INSERT INTO phrases( chinese, pinyin, english, origin, is_published ) VALUES(?,?,?,?,?)`,
       [chinese, pinyin, english, name, 0],
       function(err) {
-        if (err) return console.log(err.message);
-        console.log(`A row has been inserted with rowid ${this.lastID}`);
+        if (err) {
+          console.log(err.message);
+          return res.json({ error: err.message });
+        }
+        console.log(`A row has with ${phraseType} been inserted with rowid ${this.lastID}`);
+        return res.json({
+          msg: `A row with ${phraseType} has been inserted with rowid ${this.lastID}`
+        });
       }
     );
 
     // close the database connection
     // db.close();
-    return res.json(obj);
-  } catch (error) {
-    console.log(error);
-    res.json({ err: "Oops, something went wrong!" });
+  } catch (err) {
+    console.log(err);
+    res.json({ error: "Oops, something went wrong!" });
   }
 });
 
