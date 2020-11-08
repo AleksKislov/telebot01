@@ -3,7 +3,7 @@ const express = require("express");
 const sqlite3 = require("sqlite3").verbose();
 const axios = require("axios");
 const app = express();
-const { getPhrase, getTranslation } = require("./services");
+const { getPhrase, getTranslation, getIdiom } = require("./services");
 app.use(express.json({ extended: false }));
 
 const { BOT_INFO, CHAT_ID } = process.env;
@@ -130,6 +130,20 @@ app.post("/post_it", async (req, res) => {
   });
 
   // db.close();
+});
+
+/**
+ * @route   /get_idiom?idiom=...
+ */
+app.get("/get_idiom", async (req, res) => {
+  const { idiom } = req.query;
+  try {
+    const result = await getIdiom(idiom);
+    return res.json(result);
+  } catch (err) {
+    console.log(err);
+    res.json({ error: "Oops, something went wrong!" });
+  }
 });
 
 const PORT = process.env.PORT || 5000;
