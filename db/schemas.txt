@@ -1,0 +1,21 @@
+CREATE TABLE phrases (
+id INTEGER PRIMARY KEY,
+chinese TEXT NOT NULL UNIQUE,
+pinyin TEXT,
+english TEXT,
+russian TEXT,
+origin TEXT
+, is_published INTEGER);
+
+CREATE TABLE idioms (
+id INTEGER PRIMARY KEY,
+chinese TEXT NOT NULL UNIQUE,
+pinyin TEXT,
+english TEXT,
+russian TEXT,
+theme_zh TEXT
+theme_ru TEXT
+example_zh TEXT
+example_ru TEXT
+example_pinyin TEXT
+, is_published INTEGER);

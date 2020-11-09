@@ -10,7 +10,7 @@ const { BOT_INFO, CHAT_ID } = process.env;
 
 let db = new sqlite3.Database("./db/phrases.db", err => {
   if (err) return console.error(err.message);
-  console.log("Connected to the phrases database.");
+  console.log("Connected to the phrases.db database.");
 });
 
 app.get("/", (req, res) => res.send("hello there!"));
