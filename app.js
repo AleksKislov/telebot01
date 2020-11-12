@@ -57,8 +57,29 @@ app.get("/get_row", async (req, res) => {
   db.get(sql, [id], async (err, row) => {
     if (err) return console.error(err.message);
 
+    const length_zh = row.chinese.length;
     const translation = await getTranslation(row.chinese);
-    return res.json({ ...row, translation });
+    return res.json({ ...row, translation, length_zh });
+  });
+
+  // close the database connection
+  // db.close();
+});
+
+/**
+ * @route     /no_russian
+ * @desc      get first row without russian translation
+ */
+app.get("/no_russian", async (req, res) => {
+  // const { id } = req.query;
+  const sql = `SELECT * FROM phrases WHERE russian IS NULL ORDER BY RANDOM() LIMIT 1`;
+
+  db.get(sql, [], async (err, row) => {
+    if (err) return console.error(err.message);
+
+    const length_zh = row.chinese.length;
+    const translation = await getTranslation(row.chinese);
+    return res.json({ ...row, translation, length_zh });
   });
 
   // close the database connection

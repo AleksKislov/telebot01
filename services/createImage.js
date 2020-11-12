@@ -3,6 +3,13 @@ const { createCanvas, loadImage } = require("canvas");
 
 const width = 1000;
 const height = 1000;
+const zhTextHeight = 0.27; // percent from heght
+const pinyinHeight = 0.4;
+const ruTextHeight = 0.57;
+const chineseFont = "bold 40pt Menlo"; // max 16 chars for line
+const pinyinFont = "bold 24pt Menlo"; // max 42 chars
+const rusFont = "20pt Menlo"; // max 52 chars
+
 const canvas = createCanvas(width, height);
 const context = canvas.getContext("2d");
 context.fillStyle = "#fff";
@@ -13,44 +20,36 @@ const createBackground = () => {
   context.fillRect(0, 0, width, height);
 };
 
+// max line length == 16
 const writeChinese = chineseText => {
-  context.font = "bold 40pt Menlo";
-  // context.textBaseline = "top";
-  // context.fillStyle = "#3574d4";
-  // const textWidth = context.measureText(chineseText).width;
-  // context.fillRect(width / 2 - textWidth / 2 - 10, 170 - 15, textWidth + 20, 100);
-
-  context.fillText(chineseText, width / 2, 170);
+  context.font = chineseFont;
+  context.fillText(chineseText, width / 2, height * zhTextHeight);
 };
 
 const writePinyin = pinyin => {
-  context.font = "bold 24pt Menlo";
+  context.font = pinyinFont;
   if (pinyin.length > 40) {
     pinyin = pinyin.split(" ");
     const halfInd = Math.ceil(pinyin.length / 2);
-    context.fillText(pinyin.slice(0, halfInd).join(" "), width / 2, 280);
-    context.fillText(pinyin.slice(halfInd).join(" "), width / 2, 320);
+    context.fillText(pinyin.slice(0, halfInd).join(" "), width / 2, height * pinyinHeight);
+    context.fillText(pinyin.slice(halfInd).join(" "), width / 2, height * pinyinHeight + 50);
   } else {
-    context.fillText(pinyin, width / 2, 280);
+    context.fillText(pinyin, width / 2, height * pinyinHeight);
   }
 };
 
 const writeRussian = russianText => {
-  context.font = "20pt Menlo";
-  context.fillText(russianText, width / 2, 434);
+  context.font = rusFont;
+  context.fillText(russianText, width / 2, height * ruTextHeight);
 };
 
 // createBackground();
 
-// writeChinese("说起来容易，做起来难");
-// writePinyin("shuōqǐlái róngyì, zuòqǐlái nán");
-// writeRussian("Сказать легко, а сделать - сложно.");
-
-loadImage("../images/backgrounds/bg03.png").then(image => {
+loadImage("../images/backgrounds/bg04.png").then(image => {
   context.drawImage(image, 0, 0, 1000, 1000);
 
-  writeChinese("说起来容易，做起来难说起来容易.s");
-  writePinyin("shuōqǐlái róngyì, zuòqǐlái nán shuōqǐlái róngyì, zuòqǐlái nán nán");
+  writeChinese("说起来容易，做起来难说起来容易");
+  writePinyin("shuōqǐlái róngyì, zuòqǐlái nán");
   writeRussian(`Сказать легко, а сделать - сложно.`);
 });
 
