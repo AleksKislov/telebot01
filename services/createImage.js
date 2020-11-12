@@ -46,10 +46,10 @@ const writeRussian = russianText => {
 // writePinyin("shuōqǐlái róngyì, zuòqǐlái nán");
 // writeRussian("Сказать легко, а сделать - сложно.");
 
-loadImage("../images/backgrounds/bg04.png").then(image => {
+loadImage("../images/backgrounds/bg03.png").then(image => {
   context.drawImage(image, 0, 0, 1000, 1000);
 
-  writeChinese("说起来容易，做起来难说起来容易，做起来难");
+  writeChinese("说起来容易，做起来难说起来容易.s");
   writePinyin("shuōqǐlái róngyì, zuòqǐlái nán shuōqǐlái róngyì, zuòqǐlái nán nán");
   writeRussian(`Сказать легко, а сделать - сложно.`);
 });

@@ -81,6 +81,4 @@ const getPhrase = async phraseType => {
   }
 };
 
-console.log(getPhrase("proverb"));
-
 module.exports = { getPhrase };
