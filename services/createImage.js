@@ -1,10 +1,12 @@
 const fs = require("fs");
 const { createCanvas, loadImage } = require("canvas");
 
+const backgroundImgPath = "./images/backgrounds";
+const createdImgPath = "./images/created/phrases";
 const width = 1000;
 const height = 1000;
-const zhTextHeight = height * 0.27;
-const pinyinHeight = height * 0.42;
+const pinyinHeight = height * 0.27;
+const zhTextHeight = height * 0.42;
 const ruTextHeight = height * 0.57;
 const chineseFont = "bold 40pt Menlo"; // max 16 chars for line
 const pinyinFont = "bold 24pt Menlo"; // max 42 chars
@@ -15,15 +17,17 @@ const context = canvas.getContext("2d");
 context.fillStyle = "#fff";
 context.textAlign = "center";
 
-const createBackground = () => {
-  context.fillStyle = "#000";
-  context.fillRect(0, 0, width, height);
-};
+// const createBackground = () => {
+//   context.fillStyle = "#000";
+//   context.fillRect(0, 0, width, height);
+// };
 
 const writeChinese = chineseText => {
   const zh_length = chineseText.length;
   context.font = chineseFont;
 
+  // delete dot at the end
+  if (chineseText[zh_length - 1] === "。") chineseText = chineseText.slice(0, -1);
   if (zh_length > 32) throw new Error("Слишком длинный китайский текст!");
 
   if (zh_length > 16) {
@@ -37,6 +41,9 @@ const writeChinese = chineseText => {
 
 const writePinyin = pinyin => {
   context.font = pinyinFont;
+
+  if (pinyin[pinyin.length - 1] === ".") pinyin = pinyin.slice(0, -1);
+
   if (pinyin.length > 42) {
     pinyin = pinyin.split(" ");
     const halfInd = Math.ceil(pinyin.length / 2) + 1;
@@ -67,7 +74,7 @@ const writeFooter = () => {
 };
 
 const createImage = ({ chinese, pinyin, russian, id }) => {
-  loadImage("../images/backgrounds/bg04.png").then(image => {
+  loadImage(backgroundImgPath + "/bg04.png").then(image => {
     context.drawImage(image, 0, 0, 1000, 1000);
     writeChinese(chinese);
     writePinyin(pinyin);
@@ -75,13 +82,13 @@ const createImage = ({ chinese, pinyin, russian, id }) => {
     writeFooter();
   });
 
-  loadImage("../images/backgrounds/logo.png").then(image => {
+  loadImage(backgroundImgPath + "/logo.png").then(image => {
     context.drawImage(image, width * 0.25, height * 0.87, 50, 50);
     const buffer = canvas.toBuffer("image/png");
-    fs.writeFileSync(`../images/created/phrases/phrase_${id}.png`, buffer);
+    fs.writeFileSync(`${createdImgPath}/phrase_${id}.png`, buffer);
   });
 };
 
-// createImage({ chinese: "sdsd", pinyin: "sdas", russian: "dds", id: 13 });
+// createImage({ chinese: "razdsa", pinyin: "sdas", russian: "dds", id: 13 });
 
 module.exports = createImage;

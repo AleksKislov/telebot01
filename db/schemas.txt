@@ -5,7 +5,7 @@ pinyin TEXT,
 english TEXT,
 russian TEXT,
 origin TEXT,
-length_zh INTEGER,
+pic_created INTEGER,
 is_published INTEGER);
 
 ALTER TABLE phrases ADD COLUMN length_zh INTEGER;

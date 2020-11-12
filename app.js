@@ -3,7 +3,7 @@ const express = require("express");
 const sqlite3 = require("sqlite3").verbose();
 const axios = require("axios");
 const app = express();
-const { getPhrase, getTranslation, getIdiom } = require("./services");
+const { getPhrase, getTranslation, getIdiom, createImage } = require("./services");
 app.use(express.json({ extended: false }));
 
 const { BOT_INFO, CHAT_ID } = process.env;
@@ -165,6 +165,32 @@ app.get("/get_idiom", async (req, res) => {
     console.log(err);
     res.json({ error: "Oops, something went wrong!" });
   }
+});
+
+app.get("/create_image", async (req, res) => {
+  const sql = `SELECT * FROM phrases WHERE pic_created = 0 AND 
+  russian IS NOT NULL ORDER BY RANDOM() LIMIT 1`;
+
+  db.get(sql, [], async (err, row) => {
+    if (err) return console.error(err.message);
+
+    const { id, chinese, pinyin, russian, origin } = row;
+
+    try {
+      await createImage(row);
+      // res.send(`image created for phrase # ${id}`);
+    } catch (err) {
+      console.log(err);
+      res.json({ err: "Oops, something went wrong!" });
+    }
+    const pic_created_sql = `UPDATE phrases SET pic_created = 1 WHERE id = ${id}`;
+    const data = [0, id];
+    db.run(pic_created_sql, [], function(err) {
+      if (err) return console.error(err.message);
+      console.log(`id ${id} changed`);
+      return res.send(`id ${id} changed`);
+    });
+  });
 });
 
 const PORT = process.env.PORT || 5000;
