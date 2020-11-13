@@ -6,7 +6,7 @@ const app = express();
 const { getPhrase, getTranslation, getIdiom, createImage } = require("./services");
 app.use(express.json({ extended: false }));
 
-const { BOT_INFO, CHAT_ID } = process.env;
+const { BOT_INFO, CHAT_ID, MY_IMAGES_URL } = process.env;
 
 let db = new sqlite3.Database("./db/phrases.db", err => {
   if (err) return console.error(err.message);
@@ -151,6 +151,36 @@ app.post("/post_it", async (req, res) => {
   });
 
   // db.close();
+});
+
+app.post("/post_img", async (req, res) => {
+  const sql = `SELECT * FROM phrases WHERE is_published = 0 AND pic_created = 1 ORDER BY RANDOM() LIMIT 1`;
+
+  db.get(sql, [], async (err, row) => {
+    if (err) return console.error(err.message);
+
+    const { id } = row;
+
+    try {
+      await axios.get(
+        `https://api.telegram.org/${BOT_INFO}/sendPhoto?photo=${MY_IMAGES_URL +
+          id}.png&chat_id=${CHAT_ID}`
+      ); // ${CHAT_ID}
+
+      // return res.send("Success");
+    } catch (err) {
+      console.log(err);
+      res.json({ err: "Oops, something went wrong!" });
+    }
+
+    const published_sql = `UPDATE phrases SET is_published = 1 WHERE id = ${id}`;
+    // const data = [0, id];
+    db.run(published_sql, [], function(err) {
+      if (err) return console.error(err.message);
+      console.log(`id ${id} changed`);
+      return res.json(`id ${id} is published`);
+    });
+  });
 });
 
 /**
