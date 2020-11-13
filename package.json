@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon app.js",
-    "start": "node app.js"
+    "start": "node app.js",
+    "db": "sqlite3 db/phrases.db"
   },
   "keywords": [],
   "author": "",

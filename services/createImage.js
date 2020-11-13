@@ -1,8 +1,9 @@
 const fs = require("fs");
 const { createCanvas, loadImage } = require("canvas");
 
-const backgroundImgPath = "./images/backgrounds";
-const createdImgPath = "./images/created/phrases";
+const TESTING_IT = false;
+const backgroundImgPath = TESTING_IT ? "../images/backgrounds" : "./images/backgrounds";
+const createdImgPath = TESTING_IT ? "../images/created/phrases" : "./images/created/phrases";
 const width = 1000;
 const height = 1000;
 const pinyinHeight = height * 0.27;
@@ -10,7 +11,7 @@ const zhTextHeight = height * 0.42;
 const ruTextHeight = height * 0.57;
 const chineseFont = "bold 40pt Menlo"; // max 16 chars for line
 const pinyinFont = "bold 24pt Menlo"; // max 42 chars
-const rusFont = "20pt Menlo"; // max 52 chars
+const rusFont = "20pt Menlo"; // max 48 chars
 
 const canvas = createCanvas(width, height);
 const context = canvas.getContext("2d");
@@ -56,13 +57,17 @@ const writePinyin = pinyin => {
 
 const writeRussian = russianText => {
   context.font = rusFont;
-  if (russianText.length > 52) {
-    russianText = russianText.split(" ");
-    const halfInd = Math.ceil(russianText.length / 2) + 1;
-    context.fillText(russianText.slice(0, halfInd).join(" "), width / 2, ruTextHeight);
-    context.fillText(russianText.slice(halfInd).join(" "), width / 2, ruTextHeight + 40);
-  } else {
-    context.fillText(russianText, width / 2, ruTextHeight);
+  const ru_length = russianText.length;
+  const russianTextArr = russianText.split(" ");
+  const chunkNum = Math.ceil(ru_length / 48);
+  const firstInd = Math.ceil(russianTextArr.length / chunkNum);
+
+  for (let i = 0; i < chunkNum; i++) {
+    context.fillText(
+      russianTextArr.slice(i * firstInd, i * firstInd + firstInd).join(" "),
+      width / 2,
+      ruTextHeight + i * 40
+    );
   }
 };
 
@@ -89,6 +94,12 @@ const createImage = ({ chinese, pinyin, russian, id }) => {
   });
 };
 
-// createImage({ chinese: "razdsa", pinyin: "sdas", russian: "dds", id: 13 });
+// TESTING_IT
+// createImage({
+//   chinese: "razdsa",
+//   pinyin: "sdas",
+//   russian: "рис ешь по приправе, тветствующие объективной действительности)",
+//   id: "testing"
+// });
 
 module.exports = createImage;

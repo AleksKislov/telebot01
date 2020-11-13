@@ -168,8 +168,7 @@ app.get("/get_idiom", async (req, res) => {
 });
 
 app.get("/create_image", async (req, res) => {
-  const sql = `SELECT * FROM phrases WHERE pic_created = 0 AND 
-  russian IS NOT NULL ORDER BY RANDOM() LIMIT 1`;
+  const sql = `SELECT * FROM phrases WHERE pic_created = 0 AND russian IS NOT NULL ORDER BY id LIMIT 1`;
 
   db.get(sql, [], async (err, row) => {
     if (err) return console.error(err.message);
